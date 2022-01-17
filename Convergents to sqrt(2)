@@ -74,13 +74,13 @@ var init = () => {
 
     /////////////////////
     // Permanent Upgrades
-    theory.createPublicationUpgrade(0, currency, 1e4);
-    theory.createBuyAllUpgrade(1, currency, 1e6);
-    theory.createAutoBuyerUpgrade(2, currency, 1e10);
+    theory.createPublicationUpgrade(0, currency, 1e7);
+    theory.createBuyAllUpgrade(1, currency, 1e15);
+    theory.createAutoBuyerUpgrade(2, currency, 1e40);
 
     /////////////////////
     // Checkpoint Upgrades
-    theory.setMilestoneCost(new LinearCost(5, 15));
+    theory.setMilestoneCost(new LinearCost(10, 15));
 
     {
         q1Exp = theory.createMilestoneUpgrade(0, 3);
@@ -158,8 +158,8 @@ var getTertiaryEquation = () => {
     vn = getN(n.level)
     return "q=" + q.toString()+', n='+getN(n.level).toString()+', N(n)='+(((sqrt(2)-1).pow(vn) * ((vn % 2) ? -1 : 1) + (1+sqrt(2)).pow(vn))/2).toString();}
 
-var getPublicationMultiplier = (tau) => tau.pow(0.159);
-var getPublicationMultiplierFormula = (symbol) => "{" + symbol + "}^{0.159}";
+var getPublicationMultiplier = (tau) => tau.pow(0.148);
+var getPublicationMultiplierFormula = (symbol) => "{" + symbol + "}^{0.148}";
 var getTau = () => currency.value;
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
 
