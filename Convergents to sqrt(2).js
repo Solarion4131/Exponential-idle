@@ -8,7 +8,7 @@ var id = "convergents_to_sqrt(2)"
 var name = "Convergents to √2";
 var description = "Use the exponential growth of the numerators of the convergents to √2 to increase your rho. The first few convergents to √2 are as follows: 1, 3/2, 7/5, 17/12. N(n) here is the numerator of the nth convergent to √2, taking the 0th convergent to be 1/1. In the limit, these converge on sqrt(2). The convergents oscillate above and below √2. The rate of change of q is based on N(n).";
 var authors = "Solarion#4131";
-var version = 1.0;
+var version = 2;
 
 var q = BigNumber.ONE;
 
@@ -97,8 +97,8 @@ var init = () => {
     }
     {
         c2Exp = theory.createMilestoneUpgrade(2, 2);
-        c2Exp.description = Localization.getUpgradeIncCustomExpDesc("c_2", "0.05");
-        c2Exp.info = Localization.getUpgradeIncCustomExpInfo("c_2", "0.05");
+        c2Exp.description = Localization.getUpgradeIncCustomExpDesc("c_2", "0.5");
+        c2Exp.info = Localization.getUpgradeIncCustomExpInfo("c_2", "0.5");
         c2Exp.boughtOrRefunded = (_) => theory.invalidatePrimaryEquation();
     }
     updateAvailability();
@@ -117,7 +117,7 @@ var tick = (elapsedTime, multiplier) => {
     let vc1 = getC1(c1.level);
     let c2level = c2.isAvailable ? c2.level : 0
     let vn = getN(n.level)+c2level
-    let vc2 = c2.isAvailable ? getC2(c2.level).pow(c2Exp.level) : 1
+    let vc2 = c2.isAvailable ? getC2(c2.level).pow(getC2Exp(c2Exp.level)) : 1
     q += bonus * dt * vc1 * (vc2)*((sqrt(2)-1).pow(vn) * ((vn % 2) ? -1 : 1) + (1+sqrt(2)).pow(vn))/2
     currency.value += bonus * vq1 * vq2 * q * dt;
 
@@ -148,8 +148,8 @@ var getPrimaryEquation = () => {
     if (c2.isAvailable)
     {
         result += "c_2";
-        if (c2Exp.level == 1) result += "^{1.05}";
-        if (c2Exp.level == 2) result += "^{1.1}";
+        if (c2Exp.level == 1) result += "^{1.5}";
+        if (c2Exp.level == 2) result += "^{2}";
     }
     result+= "\\\\N(n) := 2N(n-1)+N(n-2), \\\\N(0) = 1, N(1) = 3"
     result += "\\end{matrix}";
@@ -178,7 +178,7 @@ var getQ2 = (level) => BigNumber.TWO.pow(level);
 var getC1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 1);
 var getC2 = (level) => BigNumber.TWO.pow(level);
 var getQ1Exp = (level) => BigNumber.from(1 + level * 0.05);
-var getC2Exp = (level) => BigNumber.from(1 + level * 0.05);
+var getC2Exp = (level) => BigNumber.from(1 + level * 0.5);
 var getN = (level) => {
 newn = BigNumber.from(level.toString())+1
 return newn//-1+BigNumber.from(1/2 + (newn - 1).sqrt()).floor()
