@@ -168,8 +168,8 @@ var getTertiaryEquation = () => {
     result += ')='+(((sqrt(2)-1).pow(vn) * ((vn % 2) ? -1 : 1) + (1+sqrt(2)).pow(vn))/2).toString();
     return result
 }
-var getPublicationMultiplier = (tau) => tau.pow(2.22)/50;
-var getPublicationMultiplierFormula = (symbol) => "\\frac{\\tau^{2.22}}{50}";
+var getPublicationMultiplier = (tau) => tau.pow(2.22)/100;
+var getPublicationMultiplierFormula = (symbol) => "\\frac{\\tau^{2.22}}{100}";
 var getTau = () => (currency.value).pow(0.1);
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
 
