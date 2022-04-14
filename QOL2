@@ -10,9 +10,7 @@ var autoBuyModes, publicationRatios, autoFreq;
 var useR9, useAutobuy;
 var aTheoryId;
 var debug;
-
 const MIN_FREQ = 10;
-
 var init = () => {
 
     genTables();
@@ -557,11 +555,12 @@ var theoryHandler;
     const theoryBuyHandler = (aTheory) => {
         let bought = false;
         var ct = -1;
+        lastrho = (aTheory.upgrades[0]).currency.value
         for (const upgrade of aTheory.upgrades) {
             ct++;
          //   if (!upgrade.isAvailable) continue;
             const config = autoBuyModes[aTheory.id][upgrade.id];
-            if (buyCheck(upgrade, ct) && (upgrade.isAvailable)) {
+            if (buyCheck(upgrade, ct, lastrho) && (upgrade.isAvailable)) {
                 if (!bought) bought = true;
                 buyProcess(upgrade, ct);
             }
@@ -617,7 +616,7 @@ var buyCheck;
   //  var nextpurchaseid; //qwe
    // const aTheory;
    
-    buyCheck = (upgrade, config) => {
+    buyCheck = (upgrade, config, lastrho) => {
         const aTheory = game.theories[aTheoryId];
         var varcosts = [];
         var nextpurchase;
@@ -629,7 +628,7 @@ var buyCheck;
         
       const upgrade = aTheory.upgrades[0];
      // log(aTheoryId)
-      var big = BigNumber.TEN.pow(1000);
+      var big = BigNumber.TEN.pow(1900);
       var currmulti = aTheory.nextPublicationMultiplier/aTheory.publicationMultiplier;
   //    log(currmulti)
     //  log(varcosts.size)
@@ -658,7 +657,6 @@ var buyCheck;
                 nextpurchaseid = 5
                // break
             }
-            log(nextpurchaseid)
             log(rho)
             break;
         case 1:
@@ -679,7 +677,7 @@ var buyCheck;
                 varcosts[9] = big
                 varcosts[10] *= 1
                 varcosts[11] *= 10
-              //  min = BigNumber.TEN.pow(1000)
+              //  min = BigNumber.TEN.pow(1900)
             
         
             }
@@ -728,7 +726,7 @@ var buyCheck;
                 }
                 ind+=1
             }
-            min = BigNumber.TEN.pow(1000)
+            min = BigNumber.TEN.pow(1900)
             ind = 0
             minind = 0
             
@@ -740,7 +738,7 @@ var buyCheck;
             }
             minind = varcosts1.indexOf(min)
             nextpurchaseid1 = minind*3
-            min = BigNumber.TEN.pow(1000)
+            min = BigNumber.TEN.pow(1900)
             ind = 0
             minind = 0
             
@@ -752,7 +750,7 @@ var buyCheck;
             }
             minind = varcosts2.indexOf(min)
             nextpurchaseid2 = minind*3+1
-            min = BigNumber.TEN.pow(1000)
+            min = BigNumber.TEN.pow(1900)
             ind = 0
             minind = 0
             
@@ -780,23 +778,75 @@ var buyCheck;
             varcosts[7] = varcosts[7]*r;
             //log(varcosts[4])
             break;
+        case 4:
+            upg = aTheory.upgrades[0]
+            c1 = upg.level
+            rho = upg.currency.value
+            log(c1)
+            var C = 0;
+            var jlastrho = (aTheory.publicationMultiplier / (game.sigmaTotal/20).pow(3)).pow((1/0.159))
+         //   log(jlastrho)
+          //  log(game.sigmaTotal)
+            if (jlastrho<rho * BigNumber.from(10).pow(15)) {C = 1}
+            else {C = BigNumber.from((jlastrho / rho)).pow(0.15)/BigNumber.TEN.pow(15)}
+            varcosts[0] *= 10/1.5
+            varcosts[1] *= 1
+            varcosts[4] *= 1
             
+            varcosts[2] *= 100
+            varcosts[3] *= C
+            //log(C)
+            break;
+        case 5:
+            if (currmulti<=1.01) {
+                varcosts[0] *= 5
+                varcosts[1] *= 1
+                varcosts[2] *= 1
+                varcosts[3] *= 1
+                varcosts[4] *= 20
+                varcosts[5] *= 2
+                varcosts[6] *= big
+                varcosts[7] *= big
+                varcosts[8] *= 1
+                //log(9)
+            }
+            else {
+                varcosts[0] *= 8
+                varcosts[1] *= 1
+                varcosts[2] *= 1
+                varcosts[3] *= 1
+                varcosts[4] *= 100
+                varcosts[5] *= 10
+                varcosts[6] *= big
+                varcosts[7] *= big
+                varcosts[8] *= 1
+            }
+            log(varcosts[0])
+            break;
         case 6:
             varcosts[0] = varcosts[0]*4
             varcosts[1] = big
-            varcosts[2] = big //BigNumber.TEN.pow(1000)
-            varcosts[3] = (upgrade.currency.value>varcosts[3]*10) ? 0:BigNumber.TEN.pow(1000)
-            varcosts[4] = (upgrade.currency.value>varcosts[4]*10) ? 0:BigNumber.TEN.pow(1000)
+            varcosts[2] = big //BigNumber.TEN.pow(1900)
+            varcosts[3] = (upgrade.currency.value>varcosts[3]*10) ? 0:BigNumber.TEN.pow(1900)
+            varcosts[4] = (upgrade.currency.value>varcosts[4]*10) ? 0:BigNumber.TEN.pow(1900)
             varcosts[5] = varcosts[5]*4
             varcosts[6] = varcosts[6]
             break;
-        }
+        
+        case 7: //no solarswap
+            varcosts[0] = varcosts[0]*8
+            varcosts[1] = varcosts[1]*1
+            varcosts[2] = varcosts[2]*3
+            varcosts[3] = varcosts[3]*1
+            varcosts[4] = varcosts[4]*3
+            break;
+       }
         if (aTheoryId!=2 && aTheoryId!=0) {
             var nextpurchaseid1 = 1000;
             var nextpurchaseid2 = 1000;
-        
-     //   log(varcosts[4])
-        min = BigNumber.TEN.pow(1000)
+        }
+        log(varcosts[4])
+        min = BigNumber.TEN.pow(1900)
         ind = 0
         minind = 0
       
@@ -804,11 +854,13 @@ var buyCheck;
             min = min>j?j:min
             minind = min>j?ind:minind
             ind += 1
+      //      log(j)
         }
 
         minind = varcosts.indexOf(min)
         nextpurchaseid = minind
-        
+     //   log(min)
+    //    log(nextpurchaseid)
         //log(nextpurchaseid)
        // log(varcosts[4])
        // log(r)
@@ -820,7 +872,7 @@ var buyCheck;
        //     console.log(0)
         //}
         //log(nextpurchaseid)
-    }
+    
             return config==nextpurchaseid || config==nextpurchaseid1 || config==nextpurchaseid2;
         }
         
@@ -833,7 +885,7 @@ var buyProcess;
         if (upgrade.cost.getCost(upgrade.level) == 0) upgrade.buy(1);
     }
     const custom = (upgrade, ratio) => {
-        while (upgrade.currency.value >= upgrade.cost.getSum(upgrade.level, upgrade.level+100) * ratio) upgrade.buy(100);
+      //  while (upgrade.currency.value >= upgrade.cost.getSum(upgrade.level, upgrade.level+100) * ratio) upgrade.buy(100);
         while (upgrade.currency.value >= upgrade.cost.getCost(upgrade.level) * ratio) upgrade.buy(1);
     };
     const always = (upgrade) => custom(upgrade, 1);
