@@ -645,7 +645,7 @@ var buyCheck;
                 nextpurchaseid = 0
             //    break
             }
-            else if (q2c*1.01<c4c && q2c*1.111<rho) {
+            else if (q2c*1.01<c4c && q2c*1.111111<rho) {
                 nextpurchaseid = 1
             //    break
             }
@@ -657,6 +657,7 @@ var buyCheck;
                 nextpurchaseid = 5
                // break
             }
+            Statistics.
             log(rho)
             break;
         case 1:
@@ -761,8 +762,8 @@ var buyCheck;
             }
             minind = varcosts3.indexOf(min)
             nextpurchaseid = minind*3+2
-            log(nextpurchaseid)
-            log(nextpurchaseid2)
+          //  log(nextpurchaseid)
+            //log(nextpurchaseid2)
             nextpurchaseid1 = nextpurchaseid; //remove rho1 buys
             break;
         case 3:
@@ -782,20 +783,20 @@ var buyCheck;
             upg = aTheory.upgrades[0]
             c1 = upg.level
             rho = upg.currency.value
-            log(c1)
+            //log(c1)
             var C = 0;
             var jlastrho = (aTheory.publicationMultiplier / (game.sigmaTotal/20).pow(3)).pow((1/0.159))
          //   log(jlastrho)
           //  log(game.sigmaTotal)
-            if (jlastrho<rho * BigNumber.from(10).pow(15)) {C = 1}
-            else {C = BigNumber.from((jlastrho / rho)).pow(0.15)/BigNumber.TEN.pow(15)}
+            if (jlastrho<rho * BigNumber.from(10).pow(30)) {C = 1}
+            else {C = BigNumber.from((jlastrho / rho)).pow(0.15)/BigNumber.TEN.pow(30*0.15)}
             varcosts[0] *= 10/1.5
             varcosts[1] *= 1
             varcosts[4] *= 1
             
             varcosts[2] *= 100
             varcosts[3] *= C
-            //log(C)
+           // log(C)
             break;
         case 5:
             if (currmulti<=1.01) {
@@ -821,7 +822,7 @@ var buyCheck;
                 varcosts[7] *= big
                 varcosts[8] *= 1
             }
-            log(varcosts[0])
+         //   log(varcosts[0])
             break;
         case 6:
             varcosts[0] = varcosts[0]*4
@@ -845,7 +846,7 @@ var buyCheck;
             var nextpurchaseid1 = 1000;
             var nextpurchaseid2 = 1000;
         }
-        log(varcosts[4])
+     //   log(varcosts[4])
         min = BigNumber.TEN.pow(1900)
         ind = 0
         minind = 0
