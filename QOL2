@@ -828,8 +828,8 @@ var buyCheck;
             varcosts[0] = varcosts[0]*4
             varcosts[1] = big
             varcosts[2] = big //BigNumber.TEN.pow(1900)
-            varcosts[3] = (upgrade.currency.value>varcosts[3]*10) ? 0:BigNumber.TEN.pow(1900)
-            varcosts[4] = (upgrade.currency.value>varcosts[4]*10) ? 0:BigNumber.TEN.pow(1900)
+            varcosts[3] = (upgrade.currency.value>varcosts[3]*10) ? varcosts[3]*8:BigNumber.TEN.pow(1900)
+            varcosts[4] = (upgrade.currency.value>varcosts[4]*10) ? varcosts[4]*8:BigNumber.TEN.pow(1900)
             varcosts[5] = varcosts[5]*4
             varcosts[6] = varcosts[6]
             break;
@@ -926,6 +926,8 @@ var genTables;
         publicationRatios = {};
         useAutobuy = {};
 
+
+
         for (const aTheory of game.theories) {
             if (aTheory.id == 8) continue;
 
@@ -934,7 +936,7 @@ var genTables;
                 autoBuyModes[aTheory.id][upgrade.id] = {mode: BUY_MODES.never, ratio: BigNumber.TEN};
             }
 
-            publicationRatios[aTheory.id] = BigNumber.HUNDRED;
+            publicationRatios[aTheory.id] = BigNumber.from(10000000000);
             useAutobuy[aTheory.id] = false;
         }
 
