@@ -828,8 +828,8 @@ var buyCheck;
             varcosts[0] = varcosts[0]*4
             varcosts[1] = big
             varcosts[2] = big //BigNumber.TEN.pow(1900)
-            varcosts[3] = (upgrade.currency.value>varcosts[3]*10) ? varcosts[3]*8:BigNumber.TEN.pow(1900)
-            varcosts[4] = (upgrade.currency.value>varcosts[4]*10) ? varcosts[4]*8:BigNumber.TEN.pow(1900)
+            varcosts[3] = varcosts[3]*10//(upgrade.currency.value>varcosts[3]*10) ? varcosts[3]*8:BigNumber.TEN.pow(1900)
+            varcosts[4] = varcosts[4]*10//(upgrade.currency.value>varcosts[4]*10) ? varcosts[4]*8:BigNumber.TEN.pow(1900)
             varcosts[5] = varcosts[5]*4
             varcosts[6] = varcosts[6]
             break;
