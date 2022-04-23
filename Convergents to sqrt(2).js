@@ -219,12 +219,12 @@ var getTertiaryEquation = () => {
         if (c2Exp.level == 2) result += "^{2}";
     }result+="}{\\sqrt(2) - \\frac{N(n";
     if (c2.isAvailable) {
-        result += '+\\log_2(c2)'
+        result += '+\\log_2(c_2)'
     }
     result += ')}'
     result+='{D(n'
     if (c2.isAvailable) {
-        result += '+\\log_2(c2)'
+        result += '+\\log_2(c_2)'
     }
     result += ')}}'*/
     
