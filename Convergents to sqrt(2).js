@@ -6,7 +6,7 @@ import { Utils } from "../api/Utils";
 
 var id = "convergents_to_sqrt(2)"
 var name = "Convergents to √2";
-var description = "Use the convergents to √2 to increase your ρ. The first few convergents to √2 are as follows: 1, 3/2, 7/5, 17/12. N(n) here is the numerator of the nth convergent to √2, and D(n) is the nth denominator, taking the 0th convergent to be 1/1. In the limit, these converge on √2. The convergents oscillate above and below √2. The rate of change of q is based on the closeness of the approximation.";
+var description = "Use the convergents to √2 to increase your ρ. The first few convergents to √2 are as follows: 1, 3/2, 7/5, 17/12. N(n) here is the numerator of the nth convergent to √2, and D(n) is the nth denominator, taking the 0th convergent to be 1/1. In the limit, these converge to √2. The convergents oscillate above and below √2. The rate of change of q is based on the closeness of the approximation.";
 var authors = "Solarion#4131";
 var version = 3;
 var q = BigNumber.ONE;
@@ -148,12 +148,12 @@ var getPrimaryEquation = () => {
         if (c2Exp.level == 2) result += "^{2}";
     }result+="}{\\vert\\sqrt2 - \\frac{N(n";
     if (c2.isAvailable) {
-        result += '+\\log_2(c2)'
+        result += '+\\log_2(c_2)'
     }
     result += ')}'
     result+='{D(n'
     if (c2.isAvailable) {
-        result += '+\\log_2(c2)'
+        result += '+\\log_2(c_2)'
     }
     result += ')}\\vert}'
     
@@ -236,7 +236,7 @@ var getPublicationMultiplier = (tau) => tau.pow(2.206)/200;
 var getPublicationMultiplierFormula = (symbol) => "\\frac{\\tau^{2.206}}{200}";
 var getTau = () => (currency.value).pow(0.1);
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
-
+var getCurrencyFromTau = (tau) => [tau.max(BigNumber.ONE).pow(10), currency.symbol];
 var getQ1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0);
 var getQ2 = (level) => BigNumber.TWO.pow(level);
 var getC1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 1);
