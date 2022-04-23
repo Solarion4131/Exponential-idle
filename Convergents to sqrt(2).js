@@ -189,12 +189,12 @@ var getSecondaryEquation = () => {
     result2 += "\\frac{1}{"
     result2+="\\sqrt2 - \\frac{N(n";
     if (c2.isAvailable) {
-        result2 += '+\\log_2(c2)'
+        result2 += '+\\log_2(c_2)'
     }
     result2 += ')}'
     result2+='{D(n'
     if (c2.isAvailable) {
-        result2 += '+\\log_2(c2)'
+        result2 += '+\\log_2(c_2)'
     }
     result2 += ')}}'
     
