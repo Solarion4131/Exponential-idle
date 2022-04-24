@@ -6,7 +6,7 @@ import { Utils } from "../api/Utils";
 
 var id = "convergents_to_sqrt(2)"
 var name = "Convergents to √2";
-var description = "Use the convergents to √2 to increase your ρ. The first few convergents to √2 are as follows: 1, 3/2, 7/5, 17/12. N(n) here is the numerator of the nth convergent to √2, and D(n) is the nth denominator, taking the 0th convergent to be 1/1. In the limit, these converge to √2. The convergents oscillate above and below √2. The rate of change of q is based on the closeness of the approximation.";
+var description = "Use the convergents to √2 to increase your ρ. The first few convergents to √2 are as follows: 1, 3/2, 7/5, 17/12. N(n) here is the numerator of the nth convergent to √2, and D(n) is the nth denominator, taking the 0th convergent to be 1/1. In the limit, these converge on √2. The convergents oscillate above and below √2. The rate of change of q is based on the closeness of the approximation.";
 var authors = "Solarion#4131";
 var version = 3;
 var q = BigNumber.ONE;
@@ -75,7 +75,7 @@ var init = () => {
     // Permanent Upgrades
     theory.createPublicationUpgrade(0, currency, 1e7);
     theory.createBuyAllUpgrade(1, currency, 1e15);
-    theory.createAutoBuyerUpgrade(2, currency, 1e40);
+    theory.createAutoBuyerUpgrade(2, currency, 1e0);
 
     /////////////////////
     // Checkpoint Upgrades
@@ -106,6 +106,7 @@ var init = () => {
 var updateAvailability = () => {
     c2.isAvailable = c2Term.level > 0;
     c2Exp.isAvailable = c2Term.level > 0;
+    log(new BigNumber(1.414213562))
 }
 var sqrt = (n) => (BigNumber.from(n)).sqrt()
 var tick = (elapsedTime, multiplier) => {
@@ -148,12 +149,12 @@ var getPrimaryEquation = () => {
         if (c2Exp.level == 2) result += "^{2}";
     }result+="}{\\vert\\sqrt2 - \\frac{N(n";
     if (c2.isAvailable) {
-        result += '+\\log_2(c_2)'
+        result += '+\\log_2(c2)'
     }
     result += ')}'
     result+='{D(n'
     if (c2.isAvailable) {
-        result += '+\\log_2(c_2)'
+        result += '+\\log_2(c2)'
     }
     result += ')}\\vert}'
     
@@ -166,10 +167,13 @@ var getPrimaryEquation = () => {
 }
 var getError = (n) => {
     
-    let root2 = BigNumber.from(2).pow(BigNumber.from(1)/BigNumber.from(2));
-    let vnn = (((root2-1).pow(n) * ((n % 2) ? -1 : 1) + (1+root2).pow(n))/2);
-    let vdn = BigNumber.from(((-BigNumber.from(root2-1).pow(n) * ((n % 2) ? -1 : 1) + BigNumber.from(1+root2).pow(n))/2/root2));
-    let vp = BigNumber.from(((BigNumber.from(root2+1).pow(n) * ((n % 2) ? -1 : 1))));
+    let root2 = BigNumber.from("1414213562")//BigNumber.from(2).pow(BigNumber.from(1)/BigNumber.from(2));
+    let root2m1 = BigNumber.from("0414213562")
+    let root2p1 = BigNumber.from("2414213562")
+    let e10 = BigNumber.from("10").pow(9)
+    //let vnn = (((root2-1).pow(n) * ((n % 2) ? -1 : 1) + (1+root2).pow(n))/2);
+    let vdn = BigNumber.from(((-BigNumber.from(root2m1).pow(n) / e10.pow(n) * ((n % 2) ? -1 : 1) + BigNumber.from(root2p1).pow(n)) / e10.pow(n)/2 *  e10/root2));
+    let vp = BigNumber.from(((BigNumber.from(root2p1).pow(n) / e10.pow(n) * ((n % 2) ? -1 : 1))));
     return vdn * vp
 }
 var getSecondaryEquation = () => {
@@ -189,12 +193,12 @@ var getSecondaryEquation = () => {
     result2 += "\\frac{1}{"
     result2+="\\sqrt2 - \\frac{N(n";
     if (c2.isAvailable) {
-        result2 += '+\\log_2(c_2)'
+        result2 += '+\\log_2(c2)'
     }
     result2 += ')}'
     result2+='{D(n'
     if (c2.isAvailable) {
-        result2 += '+\\log_2(c_2)'
+        result2 += '+\\log_2(c2)'
     }
     result2 += ')}}'
     
@@ -219,12 +223,12 @@ var getTertiaryEquation = () => {
         if (c2Exp.level == 2) result += "^{2}";
     }result+="}{\\sqrt(2) - \\frac{N(n";
     if (c2.isAvailable) {
-        result += '+\\log_2(c_2)'
+        result += '+\\log_2(c2)'
     }
     result += ')}'
     result+='{D(n'
     if (c2.isAvailable) {
-        result += '+\\log_2(c_2)'
+        result += '+\\log_2(c2)'
     }
     result += ')}}'*/
     
@@ -236,7 +240,7 @@ var getPublicationMultiplier = (tau) => tau.pow(2.206)/200;
 var getPublicationMultiplierFormula = (symbol) => "\\frac{\\tau^{2.206}}{200}";
 var getTau = () => (currency.value).pow(0.1);
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
-var getCurrencyFromTau = (tau) => [tau.max(BigNumber.ONE).pow(10), currency.symbol];
+
 var getQ1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0);
 var getQ2 = (level) => BigNumber.TWO.pow(level);
 var getC1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 1);
