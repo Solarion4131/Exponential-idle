@@ -79,7 +79,7 @@ var init = () => {
 
     /////////////////////
     // Checkpoint Upgrades
-    theory.setMilestoneCost(new CustomCost(lvl => BigNumber.from(lvl < 5 ? 1 + 2*lvl : 22)));
+    theory.setMilestoneCost(new CustomCost(lvl => BigNumber.from(lvl < 4 ? 1 + 3.5*lvl : lvl<5 ? 22 : 50)));
 
     {
         q1Exp = theory.createMilestoneUpgrade(0, 3);
@@ -106,7 +106,7 @@ var init = () => {
 var updateAvailability = () => {
     c2.isAvailable = c2Term.level > 0;
     c2Exp.isAvailable = c2Term.level > 0;
-    log(new BigNumber(1.414213562))
+    //log(new BigNumber(1.414213562))
 }
 var sqrt = (n) => (BigNumber.from(n)).sqrt()
 var tick = (elapsedTime, multiplier) => {
@@ -172,8 +172,12 @@ var getError = (n) => {
     let root2p1 = BigNumber.from("2414213562")
     let e10 = BigNumber.from("10").pow(9)
     //let vnn = (((root2-1).pow(n) * ((n % 2) ? -1 : 1) + (1+root2).pow(n))/2);
-    let vdn = BigNumber.from(((-BigNumber.from(root2m1).pow(n) / e10.pow(n) * ((n % 2) ? -1 : 1) + BigNumber.from(root2p1).pow(n)) / e10.pow(n)/2 *  e10/root2));
+    let vdn = BigNumber.from(((-BigNumber.from(root2m1).pow(n) / e10.pow(n) * ((n % 2) ? -1 : 1) + BigNumber.from(root2p1).pow(n) / e10.pow(n))*  e10/2 /root2));
     let vp = BigNumber.from(((BigNumber.from(root2p1).pow(n) / e10.pow(n) * ((n % 2) ? -1 : 1))));
+    //log(vp)
+    //log(vdn)
+    //log((BigNumber.from(root2m1).pow(n) / e10.pow(n) * ((n % 2) ? -1 : 1) ));
+    //log( BigNumber.from(root2p1).pow(n) / e10.pow(n)*  e10/2 /root2);
     return vdn * vp
 }
 var getSecondaryEquation = () => {
@@ -236,8 +240,8 @@ var getTertiaryEquation = () => {
     result += "\\end{matrix}";
     return result
 }
-var getPublicationMultiplier = (tau) => tau.pow(2.206)/200;
-var getPublicationMultiplierFormula = (symbol) => "\\frac{\\tau^{2.206}}{200}";
+var getPublicationMultiplier = (tau) => tau.pow(2.203)/200;
+var getPublicationMultiplierFormula = (symbol) => "\\frac{\\tau^{2.200}}{200}";
 var getTau = () => (currency.value).pow(0.1);
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
 
