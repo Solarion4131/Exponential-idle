@@ -75,7 +75,7 @@ var init = () => {
     // Permanent Upgrades
     theory.createPublicationUpgrade(0, currency, 1e7);
     theory.createBuyAllUpgrade(1, currency, 1e15);
-    theory.createAutoBuyerUpgrade(2, currency, 1e0);
+    theory.createAutoBuyerUpgrade(2, currency, 1e35);
 
     /////////////////////
     // Checkpoint Upgrades
@@ -241,7 +241,7 @@ var getTertiaryEquation = () => {
     return result
 }
 var getPublicationMultiplier = (tau) => tau.pow(2.203)/200;
-var getPublicationMultiplierFormula = (symbol) => "\\frac{\\tau^{2.200}}{200}";
+var getPublicationMultiplierFormula = (symbol) => "\\frac{\\tau^{2.203}}{200}";
 var getTau = () => (currency.value).pow(0.1);
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
 
