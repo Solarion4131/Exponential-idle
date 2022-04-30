@@ -834,10 +834,10 @@ var buyCheck;
             varcosts[5] = varcosts[5]*4
             varcosts[6] = varcosts[6]
             break;
-        (1/0.15) * (1.8)^(0/10)
+        
         case 7: //no solarswap
             var q1lv = (aTheory.upgrades[0].level)%10
-            varcosts[0] = varcosts[0]*(1/0.15) * (1.8)^(q1lv/10)
+            varcosts[0] = varcosts[0]*(1/0.15) * BigNumber.from(1.8).pow(q1lv/10)
             varcosts[1] = varcosts[1]*1
             varcosts[2] = varcosts[2]*3.4
             varcosts[3] = varcosts[3]*1.25
