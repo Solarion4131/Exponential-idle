@@ -240,7 +240,9 @@ var getTertiaryEquation = () => {
     result += "\\end{matrix}";
     return result
 }
-var getPublicationMultiplier = (tau) => tau.pow(2.203)/200;
+var tt1250 = BigNumber.TEN.pow(1250);
+var multcutoff = BigNumber.from(1.18568685283083)*BigNumber.TEN.pow(273)
+var getPublicationMultiplier = (tau) => tau<tt1250 ? tau.pow(2.203)/200:multcutoff*tau.pow(0.0001);
 var getPublicationMultiplierFormula = (symbol) => "\\frac{\\tau^{2.203}}{200}";
 var getTau = () => (currency.value).pow(0.1);
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
