@@ -78,18 +78,7 @@ var init = () => {
     theory.createBuyAllUpgrade(1, currency, 1e15);
     theory.createAutoBuyerUpgrade(2, currency, 1e0);
 // Achievements    
-    //let a3 = theory.createAchievementCategory(2, "Approximation");
-    //let a4 = theory.createAchievementCategory(3, "Publications");
-    //let a1 = theory.createAchievementCategory(0, "Miscellaneous");
-    //let a2 = theory.createAchievementCategory(1, "Publications");
-// Story chapters
-    /*let chapter3 = theory.createStoryChapter(3, "In the beginning", "There was 1 ρ. ",() => (currency.value > 0))
-    let chapter4 = theory.createStoryChapter(4, "Change of Strategy", "Attention has come to a rising variable, q. ", () => c1.level > 0)
-    let chapter1 = theory.createStoryChapter(5, "Convergent", "Your approximation has converged. ",() => n.level > 0)
-    let chapter2 = theory.createStoryChapter(6, "Multi-boost", "A new variable has been discovered. It boosts in many ways.", () => c2.level > 0)
-    let chapter8 = theory.createStoryChapter(7, "The End of Milestones", "1e500ρ. Halfway on the journey. Or is it...", () => c2.level > 0)
-    let chapter81 = theory.createStoryChapter(8, "The End", "1e1000ρ. The end of the journey has been reached. ", () => c2.level > 0)
-    */////////////////////
+    
     // Checkpoint Upgrades
     theory.setMilestoneCost(new CustomCost(lvl => BigNumber.from(lvl < 4 ? 1 + 3.5*lvl : lvl<5 ? 22 : 50)));
 
