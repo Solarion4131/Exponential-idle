@@ -191,8 +191,8 @@ var getError = (n) => {
     //if (vp*vdn>1e308) {
     //    ak =kd
     //}
-    log(vp)
-    log(vdn)
+    //log(vp)
+    //log(vdn)
     //log((BigNumber.from(root2m1).pow(n) / e10.pow(n) * ((n % 2) ? -1 : 1) ));
     //log( BigNumber.from(root2p1).pow(n) / e10.pow(n)*  e10/2 /root2);
     let ans = BigNumber.from(vdn*vp)
