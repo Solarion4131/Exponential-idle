@@ -4,11 +4,12 @@ import { parseBigNumber, BigNumber } from "../api/BigNumber";
 import { theory } from "../api/Theory";
 import { Utils } from "../api/Utils";
 
+//Credit to Playspout for simulating, and XLII for testing and simulating. 
 var id = "convergents_to_sqrt(2)"
 var name = "Convergents to √2";
 var description = "Use the convergents to √2 to increase your ρ. The first few convergents to √2 are as follows: 1, 3/2, 7/5, 17/12. N(n) here is the numerator of the nth convergent to √2, and D(n) is the nth denominator, taking the 0th convergent to be 1/1. In the limit, these converge on √2. The convergents oscillate above and below √2. The rate of change of q is based on the closeness of the approximation.";
 var authors = "Solarion#4131";
-var version = 3;
+var version = 5;
 var q = BigNumber.ONE;
 
 var q1, q2, c1, c2;
@@ -75,9 +76,20 @@ var init = () => {
     // Permanent Upgrades
     theory.createPublicationUpgrade(0, currency, 1e7);
     theory.createBuyAllUpgrade(1, currency, 1e15);
-    theory.createAutoBuyerUpgrade(2, currency, 1e35);
-
-    /////////////////////
+    theory.createAutoBuyerUpgrade(2, currency, 1e0);
+// Achievements    
+    //let a3 = theory.createAchievementCategory(2, "Approximation");
+    //let a4 = theory.createAchievementCategory(3, "Publications");
+    //let a1 = theory.createAchievementCategory(0, "Miscellaneous");
+    //let a2 = theory.createAchievementCategory(1, "Publications");
+// Story chapters
+    /*let chapter3 = theory.createStoryChapter(3, "In the beginning", "There was 1 ρ. ",() => (currency.value > 0))
+    let chapter4 = theory.createStoryChapter(4, "Change of Strategy", "Attention has come to a rising variable, q. ", () => c1.level > 0)
+    let chapter1 = theory.createStoryChapter(5, "Convergent", "Your approximation has converged. ",() => n.level > 0)
+    let chapter2 = theory.createStoryChapter(6, "Multi-boost", "A new variable has been discovered. It boosts in many ways.", () => c2.level > 0)
+    let chapter8 = theory.createStoryChapter(7, "The End of Milestones", "1e500ρ. Halfway on the journey. Or is it...", () => c2.level > 0)
+    let chapter81 = theory.createStoryChapter(8, "The End", "1e1000ρ. The end of the journey has been reached. ", () => c2.level > 0)
+    */////////////////////
     // Checkpoint Upgrades
     theory.setMilestoneCost(new CustomCost(lvl => BigNumber.from(lvl < 4 ? 1 + 3.5*lvl : lvl<5 ? 22 : 50)));
 
@@ -118,7 +130,9 @@ var tick = (elapsedTime, multiplier) => {
     let c2level = c2.isAvailable ? c2.level : 0
     let vn = getN(n.level)+c2level
     let vc2 = c2.isAvailable ? getC2(c2.level).pow(getC2Exp(c2Exp.level)) : 1
-    q += bonus * dt * vc1 * (vc2) * Math.abs(getError(vn));
+    let gete = getError(vn);
+    gete = (gete>0) ? gete:-gete;
+    q += bonus * dt * vc1 * (vc2) * (gete);
     currency.value += bonus * vq1 * vq2 * q * dt;
 
     theory.invalidateSecondaryEquation();
@@ -167,18 +181,22 @@ var getPrimaryEquation = () => {
 }
 var getError = (n) => {
     
-    let root2 = BigNumber.from("1414213562")//BigNumber.from(2).pow(BigNumber.from(1)/BigNumber.from(2));
-    let root2m1 = BigNumber.from("0414213562")
-    let root2p1 = BigNumber.from("2414213562")
-    let e10 = BigNumber.from("10").pow(9)
+    let root2 = BigNumber.from("14142135623730950488")//BigNumber.from(2).pow(BigNumber.from(1)/BigNumber.from(2));
+    let root2m1 = BigNumber.from("04142135623730950488")
+    let root2p1 = BigNumber.from("24142135623730950488")
+    let e10 = BigNumber.from("10").pow(19)
     //let vnn = (((root2-1).pow(n) * ((n % 2) ? -1 : 1) + (1+root2).pow(n))/2);
-    let vdn = BigNumber.from(((-BigNumber.from(root2m1).pow(n) / e10.pow(n) * ((n % 2) ? -1 : 1) + BigNumber.from(root2p1).pow(n) / e10.pow(n))*  e10/2 /root2));
-    let vp = BigNumber.from(((BigNumber.from(root2p1).pow(n) / e10.pow(n) * ((n % 2) ? -1 : 1))));
-    //log(vp)
-    //log(vdn)
+    let vdn = BigNumber.from(((-BigNumber.from(root2m1).pow(n) / e10.pow(n) * BigNumber.from((n % 2) ? -1 : 1) + BigNumber.from(root2p1).pow(n) / e10.pow(n))*  e10/ BigNumber.from(2) /root2));
+    let vp = BigNumber.from(((BigNumber.from(root2p1).pow(n) / e10.pow(n) * BigNumber.from((n % 2) ? -1 : 1))));
+    //if (vp*vdn>1e308) {
+    //    ak =kd
+    //}
+    log(vp)
+    log(vdn)
     //log((BigNumber.from(root2m1).pow(n) / e10.pow(n) * ((n % 2) ? -1 : 1) ));
     //log( BigNumber.from(root2p1).pow(n) / e10.pow(n)*  e10/2 /root2);
-    return vdn * vp
+    let ans = BigNumber.from(vdn*vp)
+    return ans
 }
 var getSecondaryEquation = () => {
     let result = "\\\\N(n) = 2N(n-1)+N(n-2), \\\\N(0) = 1, N(1) = 3";
@@ -240,9 +258,7 @@ var getTertiaryEquation = () => {
     result += "\\end{matrix}";
     return result
 }
-var tt1250 = BigNumber.TEN.pow(1250);
-var multcutoff = BigNumber.from(1.18568685283083)*BigNumber.TEN.pow(273)
-var getPublicationMultiplier = (tau) => tau<tt1250 ? tau.pow(2.203)/200:multcutoff*tau.pow(0.0001);
+var getPublicationMultiplier = (tau) => tau.pow(2.203)/200;
 var getPublicationMultiplierFormula = (symbol) => "\\frac{\\tau^{2.203}}{200}";
 var getTau = () => (currency.value).pow(0.1);
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
@@ -254,9 +270,8 @@ var getC2 = (level) => BigNumber.TWO.pow(level);
 var getQ1Exp = (level) => BigNumber.from(1 + level * 0.05);
 var getC2Exp = (level) => BigNumber.from(1 + level * 0.5);
 var getN = (level) => {
-newn = BigNumber.from(level.toString())+1
+newn = BigNumber.from(level+1)
 return newn//-1+BigNumber.from(1/2 + (newn - 1).sqrt()).floor()
 }
-var getK = (level) => BigNumber.from(level).pow(2)+1
 
 init();
