@@ -194,7 +194,7 @@ var getError = (n) => {
 
 var tt1250 = BigNumber.TEN.pow(1250);
 var multcutoff = BigNumber.from(1.18568685283083)*BigNumber.TEN.pow(273)
-var getPublicationMultiplier = (tau) => tau<tt1250 ? tau.pow(2.203)/200:multcutoff*tau.pow(0.0001);
+var getPublicationMultiplier = tau.pow(2.203)/200;
 var getPublicationMultiplierFormula = (symbol) => "\\frac{\\tau^{2.203}}{200}";
 var getTau = () => currency.value.pow(0.1);
 var getCurrencyFromTau = (tau) => [tau.max(BigNumber.ONE).pow(10), currency.symbol];
@@ -209,5 +209,4 @@ var getC2Exp = (level) => BigNumber.from(1 + level * 0.5);
 var getN = (level) => BigNumber.from(level + 1);
 
 init();
-Convergents_to_sqrt2.js
-9 KB
+
