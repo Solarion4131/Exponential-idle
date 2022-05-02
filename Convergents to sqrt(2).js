@@ -3,16 +3,15 @@ import { Localization } from "../api/Localization";
 import { parseBigNumber, BigNumber } from "../api/BigNumber";
 import { theory } from "../api/Theory";
 import { Utils } from "../api/Utils";
-
-//Credit to Playspout for simulating, and XLII for testing and simulating. 
+//Credit to XLII and Playspout for simulating this theory. Also, to Snaeky and Peanut for creating Euler's Formula Theory - a theory that was released with this theory in the update. 
 var id = "convergents_to_sqrt(2)"
 var name = "Convergents to √2";
 var description = "Use the convergents to √2 to increase your ρ. The first few convergents to √2 are as follows: 1, 3/2, 7/5, 17/12. N(n) here is the numerator of the nth convergent to √2, and D(n) is the nth denominator, taking the 0th convergent to be 1/1. In the limit, these converge on √2. The convergents oscillate above and below √2. The rate of change of q is based on the closeness of the approximation.";
 var authors = "Solarion#4131";
-var version = 5;
+var version = 7;
 var q = BigNumber.ONE;
 
-var q1, q2, c1, c2;
+var q1, q2, c1, c2, n;
 var q1Exp, c2Term, c2Exp;
 
 var init = () => {
@@ -59,7 +58,6 @@ var init = () => {
     }
 
     //c2
-
     {
         let getDesc = (level) => "c_2=2^{" + level + "}";
         let getInfo = (level) => "c_2=" + getC2(level).toString(0);
@@ -68,17 +66,13 @@ var init = () => {
         c2.getInfo = (amount) => Utils.getMathTo(getInfo(c2.level), getInfo(c2.level + amount));
     }
 
-
-
-    
-
     /////////////////////
     // Permanent Upgrades
-    theory.createPublicationUpgrade(0, currency, 1e7);
+    theory.createPublicationUpgrade(0, currency, 1e10);
     theory.createBuyAllUpgrade(1, currency, 1e15);
-    theory.createAutoBuyerUpgrade(2, currency, 1e0);
-// Achievements    
-    
+    theory.createAutoBuyerUpgrade(2, currency, 1e35);
+
+    /////////////////////
     // Checkpoint Upgrades
     theory.setMilestoneCost(new CustomCost(lvl => BigNumber.from(lvl < 4 ? 1 + 3.5*lvl : lvl<5 ? 22 : 50)));
 
@@ -88,43 +82,46 @@ var init = () => {
         q1Exp.info = Localization.getUpgradeIncCustomExpInfo("q_1", "0.05");
         q1Exp.boughtOrRefunded = (_) => theory.invalidatePrimaryEquation();
     }
+
     {
         c2Term = theory.createMilestoneUpgrade(1, 1);
         c2Term.description = Localization.getUpgradeAddTermDesc("c_2")
         c2Term.info = Localization.getUpgradeAddTermInfo("c_2")
-        c2Term.canBeRefunded = (amount) => c2Exp.level == 0;
-        c2Term.boughtOrRefunded = (_) => { theory.invalidatePrimaryEquation(); updateAvailability(); }
+        c2Term.canBeRefunded = (_) => c2Exp.level == 0;
+        c2Term.boughtOrRefunded = (_) => { theory.invalidatePrimaryEquation(); theory.invalidateSecondaryEquation(); updateAvailability(); }
     }
+
     {
         c2Exp = theory.createMilestoneUpgrade(2, 2);
         c2Exp.description = Localization.getUpgradeIncCustomExpDesc("c_2", "0.5");
         c2Exp.info = Localization.getUpgradeIncCustomExpInfo("c_2", "0.5");
         c2Exp.boughtOrRefunded = (_) => theory.invalidatePrimaryEquation();
     }
+
     updateAvailability();
 }
 
 var updateAvailability = () => {
     c2.isAvailable = c2Term.level > 0;
     c2Exp.isAvailable = c2Term.level > 0;
-    //log(new BigNumber(1.414213562))
 }
-var sqrt = (n) => (BigNumber.from(n)).sqrt()
+
 var tick = (elapsedTime, multiplier) => {
+    if (q1.level == 0)
+        return;
+
     let dt = BigNumber.from(elapsedTime * multiplier);
     let bonus = theory.publicationMultiplier;
     let vq1 = getQ1(q1.level).pow(getQ1Exp(q1Exp.level));
     let vq2 = getQ2(q2.level);
     let vc1 = getC1(c1.level);
-    let c2level = c2.isAvailable ? c2.level : 0
-    let vn = getN(n.level)+c2level
-    let vc2 = c2.isAvailable ? getC2(c2.level).pow(getC2Exp(c2Exp.level)) : 1
-    let gete = getError(vn);
-    gete = (gete>0) ? gete:-gete;
-    q += bonus * dt * vc1 * (vc2) * (gete);
+    let c2level = c2.isAvailable ? c2.level : 0;
+    let vn = getN(n.level) + c2level;
+    let vc2 = c2.isAvailable ? getC2(c2.level).pow(getC2Exp(c2Exp.level)) : BigNumber.ONE;
+    q += bonus * dt * vc1 * vc2 * getError(vn).abs();
     currency.value += bonus * vq1 * vq2 * q * dt;
 
-    theory.invalidateSecondaryEquation();
+    theory.invalidateTertiaryEquation();
 }
 
 var getInternalState = () => `${q}`
@@ -136,7 +133,6 @@ var setInternalState = (state) => {
 
 var postPublish = () => {
     q = BigNumber.ONE;
-    //log(getError(500))
 }
 
 var getPrimaryEquation = () => {
@@ -144,112 +140,64 @@ var getPrimaryEquation = () => {
     if (q1Exp.level == 1) result += "^{1.05}";
     if (q1Exp.level == 2) result += "^{1.1}";
     if (q1Exp.level == 3) result += "^{1.15}";
-    result += "q_2q\\\\\\dot{q}=\\frac{c_1"
+    result += "q_2q\\\\\\dot{q}=c_1"
     if (c2.isAvailable)
     {
         result += "c_2";
         if (c2Exp.level == 1) result += "^{1.5}";
         if (c2Exp.level == 2) result += "^{2}";
-    }result+="}{\\vert\\sqrt2 - \\frac{N(n";
-    if (c2.isAvailable) {
-        result += '+\\log_2(c2)'
     }
-    result += ')}'
-    result+='{D(n'
-    if (c2.isAvailable) {
-        result += '+\\log_2(c2)'
-    }
-    result += ')}\\vert}'
-    
-    
-    result += "\\end{matrix}";
+    result += "\\times\\left|\\sqrt2 - \\frac{N_m}{D_m}\\right|^{-1}\\end{matrix}"
 
-    theory.primaryEquationHeight = 70;
+    theory.primaryEquationHeight = 80;
     
     return result;
 }
-var getError = (n) => {
-    
-    let root2 = BigNumber.from("14142135623730950488")//BigNumber.from(2).pow(BigNumber.from(1)/BigNumber.from(2));
-    let root2m1 = BigNumber.from("04142135623730950488")
-    let root2p1 = BigNumber.from("24142135623730950488")
-    let e10 = BigNumber.from("10").pow(19)
-    //let vnn = (((root2-1).pow(n) * ((n % 2) ? -1 : 1) + (1+root2).pow(n))/2);
-    let vdn = BigNumber.from(((-BigNumber.from(root2m1).pow(n) / e10.pow(n) * BigNumber.from((n % 2) ? -1 : 1) + BigNumber.from(root2p1).pow(n) / e10.pow(n))*  e10/ BigNumber.from(2) /root2));
-    let vp = BigNumber.from(((BigNumber.from(root2p1).pow(n) / e10.pow(n) * BigNumber.from((n % 2) ? -1 : 1))));
-    //if (vp*vdn>1e308) {
-    //    ak =kd
-    //}
-    //log(vp)
-    //log(vdn)
-    //log((BigNumber.from(root2m1).pow(n) / e10.pow(n) * ((n % 2) ? -1 : 1) ));
-    //log( BigNumber.from(root2p1).pow(n) / e10.pow(n)*  e10/2 /root2);
-    let ans = BigNumber.from(vdn*vp)
-    return ans
-}
+
 var getSecondaryEquation = () => {
-    let result = "\\\\N(n) = 2N(n-1)+N(n-2), \\\\N(0) = 1, N(1) = 3";
+    let result = "\\begin{matrix}N_m = 2N_{m-1}+N_{m-2},\\; N_0 = 1,\\; N_1 = 3";
     
-    result += "\\\\D(n) = 2D(n-1)+D(n-2), \\\\D(0) = 1, D(1) = 2";
-    result += "\\\\"+theory.latexSymbol + "=\\max\\rho ^ {0.1}";
-    result += "\\\\"
-    theory.secondaryEquationHeight = 180;
-    let result2 = "\\begin{matrix}\\\\"
-    let c2level = c2.isAvailable ? c2.level : 0
-    let vn = getN(n.level)+c2level;
-    let vc2 = c2.isAvailable ? getC2(c2.level).pow(c2Exp.level) : 1
-    let error1 = BigNumber.from(sqrt(2));
-    result += "q=" + q.toString()+', n='+getN(n.level).toString()+','
-    //result += ')='+(((sqrt(2)-1).pow(vn) * ((vn % 2) ? -1 : 1) + (1+sqrt(2)).pow(vn))/2).toString();
-    result2 += "\\frac{1}{"
-    result2+="\\sqrt2 - \\frac{N(n";
-    if (c2.isAvailable) {
-        result2 += '+\\log_2(c2)'
-    }
-    result2 += ')}'
-    result2+='{D(n'
-    if (c2.isAvailable) {
-        result2 += '+\\log_2(c2)'
-    }
-    result2 += ')}}'
-    
-    
-    result2 += "\\end{matrix} = ";
-    error1 = getError(vn);
-    result2 += BigNumber.from(error1);
-    return result+result2
+    result += "\\\\D_m = 2D_{m-1}+D_{m-2},\\; D_0 = 1,\\; D_1 = 2";
+    result += "\\\\"+theory.latexSymbol + "=\\max\\rho ^ {0.1},\\; m=n"
+    if (c2.isAvailable)
+        result += "+\\log_2{(c_2)}";
+    result += "\\end{matrix}"
+    theory.secondaryEquationHeight = 50;
+
+    return result
 
 }
+
 var getTertiaryEquation = () => {
-    let result = "\\begin{matrix}"
-    /*let c2level = c2.isAvailable ? c2.level : 0
-    let vn = getN(n.level)+c2level
-    let vc2 = c2.isAvailable ? getC2(c2.level).pow(c2Exp.level) : 1
-    //result += "q=" + q.toString()+', n='+getN(n.level).toString()+', N(n'
-    //result += ')='+(((sqrt(2)-1).pow(vn) * ((vn % 2) ? -1 : 1) + (1+sqrt(2)).pow(vn))/2).toString();
-    result += "q_2q\\\\\\dot{q}=\\frac{c_1"
-    if (c2.isAvailable) {
-        result += "c_2";
-        if (c2Exp.level == 1) result += "^{1.5}";
-        if (c2Exp.level == 2) result += "^{2}";
-    }result+="}{\\sqrt(2) - \\frac{N(n";
-    if (c2.isAvailable) {
-        result += '+\\log_2(c2)'
-    }
-    result += ')}'
-    result+='{D(n'
-    if (c2.isAvailable) {
-        result += '+\\log_2(c2)'
-    }
-    result += ')}}'*/
-    
-    
-    result += "\\end{matrix}";
+    let m = getN(n.level) + (c2.isAvailable ? c2.level : 0);
+    let result = "q=" + q.toString() + ",\\;m=" + m.toString(0) + ",\\;";
+    result += "\\left|\\sqrt{2} - N_m/D_m\\right|^{-1}"
+    result += " = ";
+    result += getError(m).abs();
+
     return result
 }
-var getPublicationMultiplier = (tau) => tau.pow(2.203)/200;
+
+var root2 = BigNumber.from(2).sqrt();
+var root2m1 = root2 - BigNumber.ONE;
+var root2p1 = root2 + BigNumber.ONE;
+var twoRoot2 = BigNumber.TWO * root2;
+
+var getError = (n) => {
+    let sign = BigNumber.from(n % 2 == 0 ? 1 : -1); // (-1)^n
+    let nb = BigNumber.from(n);
+    let root2p1n = root2p1.pow(nb);
+    let vdn = (sign * root2m1.pow(nb) + root2p1n) / twoRoot2;
+    let vp = sign * root2p1n;
+    return vdn * vp;
+}
+
+var tt1250 = BigNumber.TEN.pow(1250);
+var multcutoff = BigNumber.from(1.18568685283083)*BigNumber.TEN.pow(273)
+var getPublicationMultiplier = (tau) => tau<tt1250 ? tau.pow(2.203)/200:multcutoff*tau.pow(0.0001);
 var getPublicationMultiplierFormula = (symbol) => "\\frac{\\tau^{2.203}}{200}";
-var getTau = () => (currency.value).pow(0.1);
+var getTau = () => currency.value.pow(0.1);
+var getCurrencyFromTau = (tau) => [tau.max(BigNumber.ONE).pow(10), currency.symbol];
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
 
 var getQ1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0);
@@ -258,9 +206,8 @@ var getC1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 1);
 var getC2 = (level) => BigNumber.TWO.pow(level);
 var getQ1Exp = (level) => BigNumber.from(1 + level * 0.05);
 var getC2Exp = (level) => BigNumber.from(1 + level * 0.5);
-var getN = (level) => {
-newn = BigNumber.from(level+1)
-return newn//-1+BigNumber.from(1/2 + (newn - 1).sqrt()).floor()
-}
+var getN = (level) => BigNumber.from(level + 1);
 
 init();
+Convergents_to_sqrt2.js
+9 KB
