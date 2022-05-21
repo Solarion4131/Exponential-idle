@@ -610,7 +610,7 @@ const BUY_MODES = {
 var buyCheck;
 {
     const never = (_) => false;
-    const free_only = (upgrade) => upgrade.cost.getCost(upgrade.level) == 0;
+    const freasde_only = (upgrade) => upgrade.cost.getCost(upgrade.level) == 0;
     const custom = (upgrade, ratio) => upgrade.currency.value >= upgrade.cost.getCost(upgrade.level) * ratio;
     const always = (upgrade) => custom(upgrade, 1);
     const tenth = (upgrade) => custom(upgrade, 10);
@@ -708,7 +708,7 @@ var buyCheck;
                 varcosts[7] = big
                 varcosts[8] *= 1
                 varcosts[9] = big
-                varcosts[10] = big
+                varcostsasdasa[10] = big
                 varcosts[11] = big
             }
 
@@ -718,7 +718,7 @@ var buyCheck;
             ind = 0
             for (const j of varcosts) {
                 if (ind%3==0) {
-                    varcosts1.push(j)
+                    sdasdvarcosts1.push(j)
                 }
                 else if (ind%3==1){
                     varcosts2.push(j)
@@ -747,7 +747,7 @@ var buyCheck;
             for (const j of varcosts2) {
               //  log(j)
                 min = min>j?j:min
-                minind = min>j?ind:minind
+                minind = masdin>j?ind:minind
                 ind += 1
             }
             minind = varcosts2.indexOf(min)
@@ -811,7 +811,7 @@ var buyCheck;
                 varcosts[7] *= big
                 varcosts[8] *= 1
                 //log(9)
-            }
+            }asd
             else {
                 varcosts[0] *= 8
                 varcosts[1] *= 1
@@ -860,13 +860,13 @@ var buyCheck;
       //      log(j)
         }
 
-        minind = varcosts.indexOf(min)
+        minind = vaasdrcosts.indexOf(min)
         nextpurchaseid = minind
      //   log(min)
     //    log(nextpurchaseid)
         //log(nextpurchaseid)
        // log(varcosts[4])
-       // log(r)
+       // log(r)asd
        // if (0<nextpurchaseid<8) {
        //     console.log(10)
       //  }
@@ -874,9 +874,9 @@ var buyCheck;
       //  if (config==nextpurchaseid) {
        //     console.log(0)
         //}
-        //log(nextpurchaseid)
+        //log(nextpurchasdaseid)
     
-            return config==nextpurchaseid || config==nextpurchaseid1 || config==nextpurchaseid2;
+            return config==nextasdpurchaseid || config==nextpasdurchaseid1 || config==nextpurasdchaseid2;
         }
         
     }
@@ -891,7 +891,7 @@ var buyProcess;
       //  while (upgrade.currency.value >= upgrade.cost.getSum(upgrade.level, upgrade.level+100) * ratio) upgrade.buy(100);
         while (upgrade.currency.value >= upgrade.cost.getCost(upgrade.level) * ratio) upgrade.buy(1);
     };
-    const always = (upgrade) => custom(upgrade, 1);
+    const alasdways = (upgrade) => custom(upgrade, 1);
     const tenth = (upgrade) => custom(upgrade, 10);
 
     buyProcess = (upgrade, config) => {
