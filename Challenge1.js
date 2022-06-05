@@ -12,7 +12,8 @@ var version = 1;
 
 var q = BigNumber.ONE;
 
-var q1, q2, c1, c2, x1, y1, x2, y2, x, y;
+var q1, q2, c1, c2, x1, y1, x2, y2, x, y, t;
+t = 1;
 var q1Exp;
 
 var init = () => {
@@ -25,7 +26,7 @@ var init = () => {
     {
         let getDesc = (level) => "q_1=" + getQ1(level).toString(0);
         let getInfo = (level) => "q_1=" + getQ1(level).toString(0);
-        q1 = theory.createUpgrade(0, currency, new FirstFreeCost(new ExponentialCost(10, Math.log2(1.61328))));
+        q1 = theory.createUpgrade(0, currency, new FirstFreeCost(new ExponentialCost(10000, Math.log2(1.61328))));
         q1.getDescription = (amount) => Utils.getMath(getDesc(q1.level));
         q1.getInfo = (amount) => Utils.getMathTo(getInfo(q1.level), getInfo(q1.level + amount));
     }
@@ -34,14 +35,14 @@ var init = () => {
     {
         let getDesc = (level) => "q_2=2^{" + level + "}";
         let getInfo = (level) => "q_2=" + getQ2(level).toString(0);
-        q2 = theory.createUpgrade(1, currency, new ExponentialCost(15, Math.log2(64)));
+        q2 = theory.createUpgrade(1, currency, new ExponentialCost(150000, Math.log2(64)));
         q2.getDescription = (amount) => Utils.getMath(getDesc(q2.level));
         q2.getInfo = (amount) => Utils.getMathTo(getInfo(q2.level), getInfo(q2.level + amount));
     }
 
     // x1
     {
-        let getDesc = (level) => "x_1=" + getY2(1000*level).toString();
+        let getDesc = (level) => "x_1=" + getY1(level).toString();
         let getInfo = (level) => "x_1=" + getY2(level).toString();
         x1 = theory.createUpgrade(2, currency, new ExponentialCost(10, Math.log2(1e6)));
         x1.getDescription = (amount) => Utils.getMath(getDesc(x1.level));
@@ -58,7 +59,7 @@ var init = () => {
 
     // y1
     {
-        let getDesc = (level) => "y_1=" + getY2(1000*level).toString();
+        let getDesc = (level) => "y_1=" + getY1(level).toString();
         let getInfo = (level) => "y_1=" + getY2(level).toString();
         y1 = theory.createUpgrade(4, currency, new ExponentialCost(10, Math.log2(1e6)));
         y1.getDescription = (amount) => Utils.getMath(getDesc(y1.level));
@@ -101,7 +102,7 @@ var updateAvailability = () => {
 }
 
 var tick = (elapsedTime, multiplier) => {
-    let dt = BigNumber.from(elapsedTime * multiplier);
+    let dt = BigNumber.from(elapsedTime);
     let bonus = theory.publicationMultiplier;
     x = getX1(x1.level)+getX2(x2.level);
     y = getY1(y1.level)+getY2(y2.level);
@@ -112,7 +113,8 @@ var tick = (elapsedTime, multiplier) => {
     q += vd * (x+y) * (1/xyval.abs());
     vq1 = getQ1(q1.level);
     vq2 = getQ2(q2.level);
-    currency.value += vq1 * vq2 * bonus * q * dt;
+    t += BigNumber.from(elapsedTime);
+    currency.value += vq1 * vq2 * q * dt * (7654*t-t**2) / 10000;
     
     theory.invalidateTertiaryEquation();
 }
@@ -161,6 +163,8 @@ var getTertiaryEquation = () => {
     let bigy = BigNumber.from(y);
     var xyval = bigx.pow(2) - getD(D.level) * bigy.pow(2);
     result += (xyval).abs();
+    result += ",\\;t=";
+    result += t;
     theory.tertiaryEquationHeight = 40;
     return result
 }
@@ -179,6 +183,6 @@ var getX1 = (level) => BigNumber.THOUSAND * level
 var getX2 = (level) => level+1
 var getY1 = (level) => BigNumber.THOUSAND * level
 var getY2 = (level) => level+1
-var getD = (level) => BigNumber.from(level+2)
+var getD = (level) => BigNumber.from((BigNumber.from((BigNumber.from(level+1))).sqrt()+0.5).floor()+level+1)
 
 init();
