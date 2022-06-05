@@ -133,7 +133,7 @@ var postPublish = () => {
 var getPrimaryEquation = () => {
     let result = "\\begin{matrix}\\dot{\\rho}=q_1";
     
-    result += "q_2q\\\\\\dot{q}=D (x+y)";
+    result += "q_2q\\times\\frac{(7654t-t^2)}{1000}\\\\\\dot{q}=D (x+y)";
     
     result += "\\times\\left|x^2-Dy^2\\right|^{-1}\\end{matrix}";
 
