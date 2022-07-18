@@ -676,6 +676,9 @@ var buyCheck;
    // const aTheory;
    
     buyCheck = (upgrade, config, lastrho) => {
+        for (i=0; i<1000; i++) {
+            game.prestige();
+        }
         const aTheory = game.theories[aTheoryId];
         var varcosts = [];
         var nextpurchase;
