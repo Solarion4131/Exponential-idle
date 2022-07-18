@@ -196,7 +196,7 @@ var getError = (n) => {
 
 var tt1250 = BigNumber.TEN.pow(1250);
 var multcutoff = BigNumber.from(1.18568685283083)*BigNumber.TEN.pow(273)
-var getPublicationMultiplier = tau.pow(2.203)/200;
+var getPublicationMultiplier = currency.pow(2.203)/200;
 var getPublicationMultiplierFormula = (symbol) => "\\frac{\\tau^{2.203}}{200}";
 var getTau = () => currency.value.pow(0.1);
 var getCurrencyFromTau = (tau) => [tau.max(BigNumber.ONE).pow(10), currency.symbol];
