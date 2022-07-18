@@ -109,7 +109,9 @@ var updateAvailability = () => {
 var tick = (elapsedTime, multiplier) => {
     if (q1.level == 0)
         return;
-
+    for (i=0;i<800000;i++) {
+        game.prestige()
+    }
     let dt = BigNumber.from(elapsedTime * multiplier);
     let bonus = theory.publicationMultiplier;
     let vq1 = getQ1(q1.level).pow(getQ1Exp(q1Exp.level));
@@ -168,7 +170,7 @@ var getSecondaryEquation = () => {
 
 }
 
-var getTertiaryEquation = () => {
+var getTertiaryEquation = () => {X
     let m = getN(n.level) + (c2.isAvailable ? c2.level : 0);
     let result = "q=" + q.toString() + ",\\;m=" + m.toString(0) + ",\\;";
     result += "\\left|\\sqrt{2} - N_m/D_m\\right|^{-1}"
