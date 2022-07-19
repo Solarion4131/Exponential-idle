@@ -109,9 +109,7 @@ var updateAvailability = () => {
 var tick = (elapsedTime, multiplier) => {
     if (q1.level == 0)
         return;
-    for (i=0;i<800000;i++) {
-        game.prestige()
-    }
+    game.activeTheory.upgrades[2].level+=1;
     let dt = BigNumber.from(elapsedTime * multiplier);
     let bonus = theory.publicationMultiplier;
     let vq1 = getQ1(q1.level).pow(getQ1Exp(q1Exp.level));
@@ -137,7 +135,7 @@ var postPublish = () => {
     q = BigNumber.ONE;
 }
 
-var getPrimaryEquation = () => {
+var getPrimaryEquation = () => { 
     let result = "\\begin{matrix}\\dot{\\rho}=q_1";
     if (q1Exp.level == 1) result += "^{1.05}";
     if (q1Exp.level == 2) result += "^{1.1}";
