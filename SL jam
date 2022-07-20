@@ -12,7 +12,7 @@ var description = "You're the first student of the now-retired professor, and no
 var authors = "ellipsis"; //display author in the "author" field
 var version = 6; //version id, make sure to change it on update
 var releaseOrder = "2";
-
+var permissions = Permissions.PERFORM_GAME_ACTIONS
 var currency = theory.createCurrency(), currency2 = theory.createCurrency(), currency3 = theory.createCurrency(); //create three currency variables and list them as currencies
 var a1, a2, b1, b2; //set a1, a2, b1, b2 levels
 var numPublications = 0; //number of publications
