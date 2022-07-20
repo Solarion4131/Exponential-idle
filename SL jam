@@ -174,7 +174,7 @@ var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier); //find tick time
     //game.activeTheory.upgrades[2].level+=1;
     let upg = game.regularUpgrades[0];
-    for (i=0; i<1000; i++) {upg.buy(1);}
+    for (i=0; i<7000; i++) {upg.buy(1);}
     rho3dot = (getb1(b1.level).pow(BigNumber.ONE + gamma2.level*BigNumber.From(0.02)) * getb2(b2.level).pow(BigNumber.ONE + gamma3.level*BigNumber.From(0.02))); //rho3dot is equal to b1.value * b2.value accounting for exponenents
     currency3.value += rho3dot*dt; //increase currency3.value by rho3dot*dt
     updateInverseE_Gamma();
