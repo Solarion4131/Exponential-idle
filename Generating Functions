@@ -9,7 +9,7 @@ requiresGameVersion("1.4.28");
 
 var id = "generating_functions"
 var name = "Generating Functions";
-var description = 'One of your many students proposes an idea. At first, you are skeptical: you say, \"Are you really sure you can make something out of a possibly divergent series?\" They say to ignore the divergence and just do calculations. Despite thinking that they would be punished for such arrogance, you decided to give it a try, and the generating function was born. A generating function is a formal power series: it is in some ways similar to i. It is not always defined, but can still be used for calculations.For example, the sum of 1 + x + x^2 + x^3 + ... is equal to 1/(1-x) when x is between -1 and 1. We define the nth term of it 1/(1-x) asthe coefficient of x^n, which here is always 1. Your student produces two functions. You take over the project. Try to improve it in asmany ways as possible!';
+var description = 'One of your many students proposes an idea. At first, you are skeptical: you say, \"Are you really sure you can make something out of a possibly divergent series?\" They say to ignore the divergence and just do calculations. Despite thinking that they would be punished for such arrogance, you decided to give it a try, and the generating function was born. A generating function is a formal power series: it is in some ways similar to i. It is not always defined, but can still be used for calculations.For example, the sum of 1 + x + x^2 + x^3 + ... is equal to 1/(1-x) when x is between -1 and 1. We define the nth term of it 1/(1-x) asthe coefficient of x^n, which here is always 1. Your student produces two functions. You take over the project. Try to improve it in as many ways as possible!';
 var authors = "Solarion#4131";
 var version = 2;
 var releaseOrder = "5"; //hopefully?
@@ -236,28 +236,17 @@ var getTertiaryEquation = () => {
     if (z.isAvailable) {
         result += ",\\;z=" + (getZ(z.level)).toString()
     }
-    result += "\\\\S(n)=" + ssval + ",\\;T(n)=" + ttval + ",\\;Z(n)=" + zzval
-    //result += getError(m);
+    result += "\\\\S(n)=" + ssval + ",\\;T(n)=" + ttval 
+    if (z.isAvailable) {
+        result+=",\\;Z(n)=" + zzval
+    }
     theory.tertiaryEquationScale = 1.2
     return result
 }
 
-// getError returns "|1 / (sqrt(2) - N_n/D_n)|"
-// Since BigNumber has problem with very small numbers, 
-// we use a slightly different form that only involves
-// exponentiation of values > 1. Using Mathematica, we define:
-//   Ni[n_] := ((1 + Sqrt[2])^n + (1 - Sqrt[2])^n)/2;
-//   Di[n_] := ((1 + Sqrt[2])^n - (1 - Sqrt[2])^n)/(2*Sqrt[2]);
-//   Abs[Simplify[1/(Sqrt[2] - Ni[n]/Di[n])]]
-// which results in:
-//   Abs[(1 - (Sqrt[8] - 3)^-n)/Sqrt[8]]
-// With further simplification, we get
-//   ((Sqrt[8] + 3)^n - (-1)^n)/Sqrt[8]
-var root8 = BigNumber.from(8).sqrt();
-var root8p3 = root8 + BigNumber.THREE;
-var getError = (n) => (root8p3.pow(BigNumber.from(n)) - BigNumber.from(1 - (n % 2) * 2)) / root8;
+
 var getPublicationMultiplier = (tau) => tau.pow(0.54)/1634;
-var getPublicationMultiplierFormula = (symbol) => "\\frac{\\tau^{0.54}{1634}";
+var getPublicationMultiplierFormula = (symbol) => "\\frac{\\tau^{0.54}}{1634}";
 var getTau = () => currency.value.pow(0.3);
 var getCurrencyFromTau = (tau) => [tau.max(BigNumber.ONE).pow(BigNumber.from(1/0.3)), currency.symbol];
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
@@ -267,6 +256,5 @@ var getQ2 = (level) => BigNumber.TWO.pow(level);
 var getS = (level) => BigNumber.from(level+1);
 var getN = (level) => BigNumber.from(level+1);
 var getZ = (level) => BigNumber.from(level+1);
-
 
 init();
