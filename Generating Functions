@@ -77,7 +77,7 @@ var init = () => {
     e10 = b10.pow(10)
     theory.createAchievement(0, achievement_category_1, "Generational Proximity", "Make your q within 1% of tau and greater than 10^8. Reward: 15% more q.", () => 1/1.01 < theory.tau/q < 1.01 && q>b10.pow(8));
     theory.createAchievement(1, achievement_category_1, "Generation Nation", "Reach 10^6 S(n), T(n) and Z(n). Reward: Add a new level of milestone upgrade 1 for free.", () => zzval > 1000000 && ssval>1000000 && ttval>10000000);
-    theory.createAchievement(2, achievement_category_1, "Massive Publications", "Reach a publication multiplier increase of 1000x. Reward: Increase S(n) exponent by 0.05.", () => theory.nextPublicationMultiplier/theory.publicationMultiplier > 1000);
+    theory.createAchievement(2, achievement_category_1, "Massive Publications", "Reach a publication multiplier increase of 1000x, or reach 1000 tau. Reward: Increase S(n) exponent by 0.05.", () => theory.nextPublicationMultiplier/theory.publicationMultiplier > 1000 || tau>BigNumber.TEN.pow(100));
     theory.createAchievement(3, achievement_category_1, "Generation Not Needed", "Get e20 rho without buying s,n or z. Reward: Increase T(n) exponent by 0.05.", () => s.level == 0 && n.level == 0 && z.level == 0 && currency.value>BigNumber.TEN.pow(10))
     theory.createAchievement(4, achievement_category_1, "Z supremacy", "Make Z(n) larger than S(n) and T(n). Reward: Z is flattered. Increase Z(n) exponent by 0.1.", () => zzval>ssval && zzval>ttval)
    // for (i=0;i<theory.achievements.length;i++) {
