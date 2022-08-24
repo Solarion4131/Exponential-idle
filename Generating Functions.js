@@ -132,9 +132,19 @@ var factorial = (n) => {
     }
     return p
 }
+var factorial2 = (n) => {
+    return (BigNumber.TWO*Math.PI*n).sqrt() * BigNumber.from(n/Math.E).pow(n)
+}
+//log(factorial2(10)/factorial3(10))
+var factorial3 = (n) => {
+    if (n>20) {
+        return factorial2(n)
+    }
+    return factorial(n)
+}
 var getSval = (n,s) => {
     p = BigNumber.ONE;
-    p = factorial(n+s-1)/factorial(n)/factorial(s-1)
+    p = factorial3(n+s-1)/factorial3(n)/factorial3(s-1)
     return p
 }
 var getTval = (n) => {
@@ -170,9 +180,11 @@ var tick = (elapsedTime, multiplier) => {
     //log((theory.achievements[0].isUnlocked?1.05:1.00))
     currency.value += bonus * dt * vq1*vq2*q * (theory.achievements[5].isUnlocked?1.10:1.00); //bonus * vq1 * vq2 * q * dt;
     //log(getSval(vn,vs))
-    //log(factorial(500)) 
+    //log(factorial3(500)) 
     //log(vs)
     theory.invalidateTertiaryEquation();
+    theory.invalidateSecondaryEquation();
+    theory.invalidatePrimaryEquation();
 }
 
 var getInternalState = () => `${q}`
