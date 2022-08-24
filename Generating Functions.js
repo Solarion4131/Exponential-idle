@@ -80,7 +80,7 @@ var init = () => {
     theory.createAchievement(2, achievement_category_1, "Massive Publications", "Reach a publication multiplier increase of 1000x, or reach 10^100 tau. Reward: Increase S(n) exponent by 0.05.", () => theory.nextPublicationMultiplier/theory.publicationMultiplier > 1000 || theory.tau>BigNumber.TEN.pow(100));
     theory.createAchievement(3, achievement_category_1, "Generation Not Needed", "Get e20 rho without buying s,n or z. Reward: Increase T(n) exponent by 0.05.", () => s.level == 0 && n.level == 0 && z.level == 0 && currency.value>BigNumber.TEN.pow(10))
     theory.createAchievement(4, achievement_category_1, "Z supremacy", "Make Z(z) larger than S(n) and T(n). Reward: Z is flattered. Increase Z(z) exponent by 0.1.", () => zzval>ssval && zzval>ttval)
-    theory.createAchievement(5, achievement_category_1, "Lower that q1", "Reach 10^100 rho with only the free level of q1. Reward: 10% more rho.", () => q1.level==1 && currency.value.log10()>100)
+    theory.createAchievement(5, achievement_category_1, "Lower that q1", "Reach 10^100 rho with only the free level of q1. You may buy other variables. Reward: 10% more rho.", () => q1.level==1 && currency.value.log10()>100)
    // for (i=0;i<theory.achievements.length;i++) {
     //    theory.achievements[i].isUnlocked = true
     //}
