@@ -165,7 +165,7 @@ var tick = (elapsedTime, multiplier) => {
     //theory.milestoneUpgrades[0].maxLevel = 4+theory.achievements[1].isUnlocked
     q1inclevel = theory.achievements[1].isUnlocked
 
-    q += BigNumber.TWO.pow(multQDot.level) * ssval.pow(1+(theory.achievements[2].isUnlocked)*0.05) * ttval.pow(1+(theory.achievements[3].isUnlocked)*0.05)  * zzval.pow(1+(theory.achievements[4].isUnlocked)*0.1) * (theory.achievements[0].isUnlocked?1.15:1.00);
+    q += BigNumber.TWO.pow(multQDot.level) * ssval.pow(1+(theory.achievements[2].isUnlocked)*0.05) * ttval.pow(1+(theory.achievements[3].isUnlocked)*0.05)  * zzval.pow(1+(theory.achievements[4].isUnlocked)*0.1) * (theory.achievements[0].isUnlocked?1.15:1.00) * dt * multiplier;
     t += dt/multiplier;
     //log((theory.achievements[0].isUnlocked?1.05:1.00))
     currency.value += bonus * dt * vq1*vq2*q * (theory.achievements[5].isUnlocked?1.10:1.00); //bonus * vq1 * vq2 * q * dt;
