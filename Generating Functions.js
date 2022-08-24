@@ -11,7 +11,8 @@ var id = "generating_functions"
 var name = "Generating Functions";
 var description = 'One of your many students proposes an idea. At first, you are skeptical: you say, \"Are you really sure you can make something out of a possibly divergent series?\" They say to ignore the divergence and just do calculations. Despite thinking that they would be punished for such arrogance, you decided to give it a try, and the generating function was born. A generating function is a formal power series: it is in some ways similar to i. It is not always defined, but can still be used for calculations. For example, the sum of 1 + x + x^2 + x^3 + ... is equal to 1/(1-x) when x is between -1 and 1. We define the nth term of it 1/(1-x) as the coefficient of x^n, which here is always 1. Your student produces two functions. You take over the project. Try to improve it in as many ways as possible!';
 var authors = "Solarion#4131";
-var version = 2;
+var version = 4;
+var subversion = 3;
 var releaseOrder = "5"; //hopefully?
 var q = BigNumber.ONE;
 
@@ -75,12 +76,13 @@ var init = () => {
 
     b10 = BigNumber.TEN
     e10 = b10.pow(10)
-    theory.createAchievement(0, achievement_category_1, "Generational Proximity", "Make your q within 1% of tau and greater than 10^8. Reward: 15% more q.", () => 1/1.01 < theory.tau/q < 1.01 && q>b10.pow(8));
+    theory.createAchievement(0, achievement_category_1, "Generational Proximity", "Make your q within 1% of tau and greater than 10^8. Reward: 15% more q.", () => 1/1.01 < theory.tau/q && theory.tau/q< 1.01 && q>b10.pow(8));
+
     theory.createAchievement(1, achievement_category_1, "Generation Nation", "Reach 10^6 S(n), T(n) and Z(z). Reward: Add a new level of milestone upgrade 1 for free.", () => zzval > 1000000 && ssval>1000000 && ttval>10000000);
     theory.createAchievement(2, achievement_category_1, "Massive Publications", "Reach a publication multiplier increase of 1000x, or reach 10^100 tau. Reward: Increase S(n) exponent by 0.05.", () => theory.nextPublicationMultiplier/theory.publicationMultiplier > 1000 || theory.tau>BigNumber.TEN.pow(100));
     theory.createAchievement(3, achievement_category_1, "Generation Not Needed", "Get e20 rho without buying s,n or z. Reward: Increase T(n) exponent by 0.05.", () => s.level == 0 && n.level == 0 && z.level == 0 && currency.value>BigNumber.TEN.pow(10))
     theory.createAchievement(4, achievement_category_1, "Z supremacy", "Make Z(z) larger than S(n) and T(n). Reward: Z is flattered. Increase Z(z) exponent by 0.1.", () => zzval>ssval && zzval>ttval)
-    theory.createAchievement(5, achievement_category_1, "Lower that q1", "Reach 10^100 rho with only the free level of q1. You may buy other variables. Reward: 10% more rho.", () => q1.level==1 && currency.value.log10()>100)
+    theory.createAchievement(5, achievement_category_1, "Lower that q1", "Reach 10^100 rho with only the free level of q1. Reward: 10% more rho.", () => q1.level==1 && currency.value.log10()>100)
    // for (i=0;i<theory.achievements.length;i++) {
     //    theory.achievements[i].isUnlocked = true
     //}
