@@ -138,8 +138,7 @@ var tick = (elapsedTime, multiplier) => {
     
     let tickspeed = getTickspeed();
 
-    if (tickspeed.isZero)
-        return;
+
 
     let timeLimit = 1 / tickspeed.Min(BigNumber.TEN).toNumber();
     time += elapsedTime;
@@ -228,3 +227,4 @@ var getC4 = (level) => BigNumber.TEN.pow(level);
 var getTickspeed = () => getQ1(q1.level) * getQ2(q2.level);
 
 init();
+tick();
